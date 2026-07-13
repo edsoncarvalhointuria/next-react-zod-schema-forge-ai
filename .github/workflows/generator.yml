@@ -28,7 +28,7 @@ jobs:
 
       - name: Rodando Script
         env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }} # Puxa do "Cofre" do GitHub!
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: python handler.py
 
       - name: Config User
