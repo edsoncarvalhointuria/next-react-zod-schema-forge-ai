@@ -134,16 +134,20 @@ def generateSchema(scenario):
 if __name__ == "__main__":
     i = 0
     while True:
-        if i > 490:
-            print("ACABOU A COTA")
-            break
         print("INICIANDO")
         scenario = scenarios[i % len(scenarios)]
         try:
             result = generateSchema(scenario)
-        except:
-            print("\nHouve um erro, esperando mais 10 minuto\n")
-            time.sleep(60 * 10)
+        except Exception as error:
+            e = str(error)
+            print(e)
+
+            if "429" in e or "quota" in e or "exhausted" in e:
+                print("ACABOU A COTA")
+                break
+
+            ("\nHouve um erro, esperando mais 10 minuto\n")
+            time.sleep(1)
             continue
 
         with open("zod.jsonl", "a", encoding="utf-8") as path:
