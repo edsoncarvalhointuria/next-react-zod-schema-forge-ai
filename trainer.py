@@ -1,4 +1,10 @@
-from transformers import AutoTokenizer, AutoModelForCausalLM, TrainingArguments
+from transformers import (
+    AutoTokenizer,
+    AutoModelForCausalLM,
+    TrainingArguments,
+    BitsAndBytesConfig,
+)
+import torch
 from trl import SFTTrainer
 from peft import LoraConfig, get_peft_model
 from datasets import load_dataset
@@ -25,7 +31,7 @@ if __name__ == "__main__":
     lora = LoraConfig(
         r=16,
         lora_alpha=32,
-        target_modules=["c_attn"],
+        target_modules=["q_proj", "k_proj", "v_proj", "o_proj"],
         bias="none",
         task_type="CAUSAL_LM",
     )
@@ -39,15 +45,21 @@ if __name__ == "__main__":
         remove_columns=dataset["train"].column_names,
     )
 
-    model_name = "gpt2"
+    model_name = "microsoft/Phi-3-mini-4k-instruct"
     translate = AutoTokenizer.from_pretrained(model_name)
-    translate.pad_token = translate.eos_token
-    translate.chat_template = "{% for message in messages %}{{ message['role'] }}: {{ message['content'] }}\n{% endfor %}"
-    brain = AutoModelForCausalLM.from_pretrained(model_name)
+    config_4bits = BitsAndBytesConfig(
+        load_in_4bit=True,
+        bnb_4bit_quant_type="nf4",
+        bnb_4bit_compute_dtype=torch.bfloat16,
+    )
+    brain = AutoModelForCausalLM.from_pretrained(
+        model_name, quantization_config=config_4bits
+    )
     rules = TrainingArguments(
         output_dir="./meu-modelo",
-        num_train_epochs=1,
+        num_train_epochs=3,
         per_device_train_batch_size=2,
+        gradient_accumulation_steps=4,
     )
 
     trainer = SFTTrainer(
@@ -57,6 +69,7 @@ if __name__ == "__main__":
         args=rules,
         processing_class=translate,
         peft_config=lora,
+        max_seq_length=4096,
     )
 
     trainer.train()
