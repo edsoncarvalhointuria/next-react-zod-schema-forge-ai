@@ -56,16 +56,19 @@ if __name__ == "__main__":
         model_name, quantization_config=config_4bits, dtype=torch.float16
     )
     rules = TrainingArguments(
-        output_dir="./resultados",
-        per_device_train_batch_size=1,
-        gradient_accumulation_steps=4,
+        output_dir="./schema-forg-ai",
+        per_device_train_batch_size=2,
+        gradient_accumulation_steps=16,
+        gradient_checkpointing=True,
         optim="paged_adamw_8bit",
         logging_steps=10,
-        learning_rate=2e-4,
+        learning_rate=1e-4,
+        eval_strategy="steps",
+        eval_steps=100,
         max_grad_norm=0.3,
-        num_train_epochs=1,
+        num_train_epochs=2,
         warmup_ratio=0.03,
-        lr_scheduler_type="constant",
+        lr_scheduler_type="cosine",
         save_steps=200,
     )
 

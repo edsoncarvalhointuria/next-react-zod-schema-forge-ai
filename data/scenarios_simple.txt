@@ -1,0 +1,10 @@
+A basic email subscription payload with only an email address and a newsletter opt-in boolean.
+A user logout request containing only a session token string.
+A simple feature flag toggle response with a feature name and a boolean enabled status.
+An account deletion confirmation payload containing a user ID and a deletion reason string.
+A basic health check ping response containing only a status string and an uptime integer.
+A password reset request with only a user email and a temporary reset code.
+An API rate limit warning response with a message string and a retry-after integer in seconds.
+A simple like button toggle request containing a post ID and a boolean like status.
+A two-factor authentication code submission containing a user ID and a 6-digit code string.
+A generic success API response with only a message string and a boolean success flag

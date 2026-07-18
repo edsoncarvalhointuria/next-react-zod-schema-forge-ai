@@ -1,0 +1,10 @@
+A user profile update request containing a user ID and a nested object for new contact preferences.
+A shopping cart summary response containing a cart ID and a simple array of product SKU strings.
+A product price update payload containing the product ID and a nested object for the new price and currency.
+A basic weather widget response showing city name and a nested object for current temperature and humidity.
+A server error response containing an error code and a nested array of simple error message strings.
+A blog post comment submission containing the post ID and a nested object for the author's name and comment text.
+A simple order status response containing an order ID and a nested object for tracking status and estimated delivery date.
+A user settings fetch response containing a user ID and a nested object for theme and language preferences.
+A device registration payload containing a device ID and a nested object for OS version and app version.
+A basic flight search result containing a flight ID and a simple array of available seat class strings
